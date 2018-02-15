@@ -6,6 +6,8 @@ void evolve_field(std::vector<int>& field, double b, int num_steps)
     int size = static_cast<int>(sqrt(field.size()));
 
 	std::vector<int> scores(size*size, -1);
+	std::vector<int> prevField(size*size);
+	std::copy(field.begin(), field.end(), prevField.begin());
 
 	//Scores
 	for (int k = 0; k < size; k++) {
@@ -50,6 +52,9 @@ void evolve_field(std::vector<int>& field, double b, int num_steps)
 			}
 		}
 
-		field[k] = field[bestStrategyIndex];
+		field[k] = prevField[bestStrategyIndex];
 	}
+
+	scores.clear();
+	prevField.clear();
 }
