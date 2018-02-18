@@ -5,8 +5,8 @@ from libcpp.vector cimport vector
 from numpy cimport import_array, PyArray_SimpleNewFromData, NPY_INT, npy_intp
 
 cdef extern from "evolve.cc":
-    void evolve_field(vector[int]&, double, int)
-    void fake_evolve(vector[int]&, double, int)
+    void evolve_field(vector[int]&, double, int) nogil
+    void fake_evolve(vector[int]&, double, int) nogil
 
 
 cdef class GameField:
@@ -46,8 +46,9 @@ cdef class GameField:
         for j in range(arr.size):
             self._field[j] = arr[j]
 
-    def evolve(self, num_steps=1):
-        fake_evolve(self._field, self.b, num_steps)
+    def evolve(self, int num_steps=1):
+        with nogil:
+            fake_evolve(self._field, self.b, num_steps)
 
 #### init the numpy C API
 import_array()
