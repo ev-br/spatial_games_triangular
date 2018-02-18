@@ -1,6 +1,16 @@
 #include "evolve.h"
 #include<cmath>
 
+
+void fake_evolve(std::vector<int>& field, double b, int num_steps)
+{
+    for (std::size_t j=0; j < field.size(); ++j){
+        field[j] = field[j] == 0 ? 1 : 0;
+    }
+
+}
+
+
 void evolve_field(std::vector<int>& field, double b, int num_steps)
 {
     int size = static_cast<int>(sqrt(field.size()));
