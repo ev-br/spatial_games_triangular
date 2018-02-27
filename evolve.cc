@@ -23,11 +23,11 @@ void evolve_field(std::vector<int>& field, double b, int num_steps)
     int size = static_cast<int>(sqrt(field.size()));
 
 	std::vector<int> scores(size*size, -1);
-	std::vector<int> prevField(size*size);
-	std::copy(field.begin(), field.end(), prevField.begin());
+	std::vector<int> currentField(size*size);
+	std::copy(field.begin(), field.end(), currentField.begin());
 
 	//Scores
-	for (int k = 0; k < size; k++) {
+	for (int k = 0; k < size*size; k++) {
         int y = k / size; // Row
         int x = k % size; // Col
 
@@ -43,13 +43,13 @@ void evolve_field(std::vector<int>& field, double b, int num_steps)
 
 		if (field[k] == 1)
 		{
-			scores[k] *= b;
+			scores[k] = scores[k] * b;
 		}
     }
 	
 
 	//Strategy
-	for (int k = 0; k < size; k++) {
+	for (int k = 0; k < size*size; k++) {
 		int y = k / size; // Row
 		int x = k % size; // Col
 
@@ -59,8 +59,7 @@ void evolve_field(std::vector<int>& field, double b, int num_steps)
 		{
 			for (int j = -1; j <= 1; j++) //Col
 			{
-				int memberIndex = (x + i + size) % size +
-							  size * (y + j + size) % size;
+				int memberIndex = (x + i + size) % size + size * (y + j + size) % size;
 
 				if (scores[bestStrategyIndex] < scores[memberIndex]) 
 				{
@@ -69,9 +68,9 @@ void evolve_field(std::vector<int>& field, double b, int num_steps)
 			}
 		}
 
-		field[k] = prevField[bestStrategyIndex];
+		field[k] = currentField[bestStrategyIndex];
 	}
 
 	scores.clear();
-	prevField.clear();
+	currentField.clear();
 }
