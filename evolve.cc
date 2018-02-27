@@ -1,5 +1,22 @@
 #include "evolve.h"
 #include<cmath>
+#include<iostream>
+
+
+void fake_evolve(std::vector<int>& field, double b, int num_steps)
+{
+    for (int step=0; step < num_steps; step++){
+        update(field, b);
+    }
+}
+
+void update(std::vector<int>& field, double b)
+{
+    for (std::size_t j=0; j < field.size(); ++j){
+        field[j] = field[j] == 0 ? 1 : 0;
+    }
+}
+///////////////////////////////////////////////////////////////////
 
 void evolve_field(std::vector<int>& field, double b, int num_steps)
 {
