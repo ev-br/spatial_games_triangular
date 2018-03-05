@@ -25,6 +25,18 @@ cdef class GameField:
         for i in range(L*L):
             self._field[i] = 0
 
+# TODO: 
+#    def __cinit__(self, int L, double b, double per, int seed=None):
+#        self.L = L
+#        self.b = b
+#        self._field.resize(L*L)
+#
+#        if not seed == None:
+#            np.random.seed(seed)
+#            
+#        for i in range(L*L):
+#            self._field[i] = int(100 * np.rando.rand() < per)
+
     @property
     def field(self):
         """Return the field as a numpy array."""
@@ -48,7 +60,7 @@ cdef class GameField:
 
     def evolve(self, int num_steps=1):
         with nogil:
-            fake_evolve(self._field, self.b, num_steps)
+            evolve_field(self._field, self.b, num_steps)
 
 #### init the numpy C API
 import_array()

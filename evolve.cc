@@ -41,6 +41,9 @@ void evolve_field(std::vector<int>& field, double b, int num_steps)
 			{
 				for (int j = -1; j <= 1; j++) //Col
 				{
+					if ((i == -1 && j == -1) || (i == 1 && j == 1))
+						continue;
+
 					int memberIndex = (x + i + size) % size + size * (y + j + size) % size;
 
 					scores[k] += (1 - field[memberIndex]);
@@ -64,6 +67,9 @@ void evolve_field(std::vector<int>& field, double b, int num_steps)
 			{
 				for (int j = -1; j <= 1; j++) //Col
 				{
+					if ((i == -1 && j == -1) || (i == 1 && j == 1))
+						continue;
+											
 					int memberIndex = (x + i + size) % size + size * (y + j + size) % size;
 
 					if (scores[bestStrategyIndex] < scores[memberIndex]) 

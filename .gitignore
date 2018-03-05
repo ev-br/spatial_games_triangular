@@ -1,3 +1,5 @@
 /build
+/.vscode
+/.ipynb_checkpoints
 game.cpp
 *.pyd
