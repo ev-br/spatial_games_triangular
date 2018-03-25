@@ -29,11 +29,14 @@ cdef class GameField:
         self.b = b
         self._field.resize(L*L)
 
-        if not seed == 0:
-            np.random.seed(seed)
-            
-        for i in range(L*L):
-            self._field[i] = int(100 * np.random.rand() < per)
+        if seed == -1:
+            self._field = np.array([int(i == L*L // 2) for i in range(L*L)])
+        else:
+            if not seed == 0:
+                np.random.seed(seed)
+                
+            for i in range(L*L):
+                self._field[i] = int(100 * np.random.rand() < per)
 
     @property
     def field(self):
