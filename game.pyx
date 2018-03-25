@@ -1,41 +1,39 @@
 # distutils: language=c++
 import numpy as np
+import matplotlib.pyplot as plt
 
 from libcpp.vector cimport vector
 from numpy cimport import_array, PyArray_SimpleNewFromData, NPY_INT, npy_intp
 
 cdef extern from "evolve.cc":
     void evolve_field(vector[int]&, double, int) nogil
-    void fake_evolve(vector[int]&, double, int) nogil
-
 
 cdef class GameField:
     cdef vector[int] _field
     cdef int L
     cdef double b
 
-    def __init__(self, L, b):
+    def __init__(self, L, b, per, seed=0):
         pass
 
-    def __cinit__(self, int L, double b):
-        self.L = L
-        self.b = b
-        self._field.resize(L*L)
-
-        for i in range(L*L):
-            self._field[i] = 0
-
-# TODO: 
-#    def __cinit__(self, int L, double b, double per, int seed=None):
+#    def __cinit__(self, int L, double b):
 #        self.L = L
 #        self.b = b
 #        self._field.resize(L*L)
 #
-#        if not seed == None:
-#            np.random.seed(seed)
-#            
 #        for i in range(L*L):
-#            self._field[i] = int(100 * np.rando.rand() < per)
+#            self._field[i] = 0
+
+    def __cinit__(self, int L, double b, double per, int seed=0):
+        self.L = L
+        self.b = b
+        self._field.resize(L*L)
+
+        if not seed == 0:
+            np.random.seed(seed)
+            
+        for i in range(L*L):
+            self._field[i] = int(100 * np.random.rand() < per)
 
     @property
     def field(self):
@@ -44,6 +42,11 @@ cdef class GameField:
         dims[0] = self.L 
         dims[1] = self.L
         return PyArray_SimpleNewFromData(2, dims, NPY_INT, &self._field[0])
+
+    @property
+    def size(self):
+        """Return field size."""
+        return self.L
 
     @field.setter
     def field(self, arr):
@@ -61,6 +64,13 @@ cdef class GameField:
     def evolve(self, int num_steps=1):
         with nogil:
             evolve_field(self._field, self.b, num_steps)
+
+    def show(self, point_size=10):
+        plt.figure(figsize = (10, 6.66))
+        y, x = (1-self.field).nonzero()
+        plt.scatter(x + y*np.sin(np.pi/6), y * np.sin(np.pi/3), s=point_size, marker='h')
+        y, x = self.field.nonzero()
+        plt.scatter(x + y*np.sin(np.pi/6), y * np.sin(np.pi/3), s=point_size, marker='h', c='r')
 
 #### init the numpy C API
 import_array()

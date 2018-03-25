@@ -2,22 +2,6 @@
 #include <cmath>
 #include <iostream>
 
-
-void fake_evolve(std::vector<int>& field, double b, int num_steps)
-{
-    for (int step=0; step < num_steps; step++){
-        update(field, b);
-    }
-}
-
-void update(std::vector<int>& field, double b)
-{
-    for (std::size_t j=0; j < field.size(); ++j){
-        field[j] = field[j] == 0 ? 1 : 0;
-    }
-}
-///////////////////////////////////////////////////////////////////
-
 void evolve_field(std::vector<int>& field, double b, int num_steps)
 {
     int size = static_cast<int>(sqrt(field.size()));
@@ -44,9 +28,9 @@ void evolve_field(std::vector<int>& field, double b, int num_steps)
 					if ((i == -1 && j == -1) || (i == 1 && j == 1))
 						continue;
 
-					int memberIndex = (x + i + size) % size + size * (y + j + size) % size;
+					int memberIndex = (x + i + size) % size + size * ((y + j + size) % size);
 
-					scores[k] += (1 - field[memberIndex]);
+					scores[k] += field[memberIndex] == 0 ? 1 : 0;
 				}
 			}
 
@@ -70,7 +54,7 @@ void evolve_field(std::vector<int>& field, double b, int num_steps)
 					if ((i == -1 && j == -1) || (i == 1 && j == 1))
 						continue;
 											
-					int memberIndex = (x + i + size) % size + size * (y + j + size) % size;
+					int memberIndex = (x + i + size) % size + size * ((y + j + size) % size);
 
 					if (scores[bestStrategyIndex] < scores[memberIndex]) 
 					{
