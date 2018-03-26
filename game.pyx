@@ -68,8 +68,9 @@ cdef class GameField:
         with nogil:
             evolve_field(self._field, self.b, num_steps)
 
-    def show(self, point_size=10):
-        plt.figure(figsize = (10, 6.66))
+    def show(self, point_size=10, scale=1):
+        plt.clf()
+        plt.figure(figsize = (scale*10, scale*6.66))
         y, x = (1-self.field).nonzero()
         plt.scatter(x + y*np.sin(np.pi/6), y * np.sin(np.pi/3), s=point_size, marker='h')
         y, x = self.field.nonzero()
