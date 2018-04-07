@@ -16,18 +16,13 @@ cdef class GameField:
     def __init__(self, L, b, per, seed=0):
         pass
 
-#    def __cinit__(self, int L, double b):
-#        self.L = L
-#        self.b = b
-#        self._field.resize(L*L)
-#
-#        for i in range(L*L):
-#            self._field[i] = 0
-
     def __cinit__(self, int L, double b):
         self._L = L
         self._b = b
         self._field.resize(L*L)
+
+        for i in range(L*L):
+            self._field[i] = 0
 
     @property
     def field(self):
@@ -57,7 +52,7 @@ cdef class GameField:
 
     def evolve(self, int num_steps=1):
         with nogil:
-            evolve_field(self._field, self.b, num_steps)
+            evolve_field(self._field, self._b, num_steps)
 
 #### init the numpy C API
 import_array()
