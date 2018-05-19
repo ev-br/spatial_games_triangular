@@ -13,7 +13,7 @@ cdef class GameField:
     cdef int _L
     cdef double _b
 
-    def __init__(self, L, b, per, seed=0):
+    def __init__(self, L, b):
         pass
 
     def __cinit__(self, int L, double b):
@@ -29,7 +29,7 @@ cdef class GameField:
         """Return the field as a numpy array."""
         cdef npy_intp dims[2]
         dims[0] = self._L 
-        dims[1] = self._L
+        dims[1] = self._L   
         return PyArray_SimpleNewFromData(2, dims, NPY_INT, &self._field[0])
 
     @property
