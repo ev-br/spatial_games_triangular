@@ -6,7 +6,8 @@ from libcpp.vector cimport vector
 from numpy cimport import_array, PyArray_SimpleNewFromData, NPY_INT, npy_intp
 
 cdef extern from "evolve.cc":
-    void evolve_field(vector[int]&, double, int) nogil
+    void evolveT(vector[int]&, double, int) nogil
+    void evolveQ(vector[int]&, double, int) nogil
 
 cdef class GameField:
     cdef vector[int] _field
@@ -16,7 +17,7 @@ cdef class GameField:
     def __init__(self, L, b):
         pass
 
-    def __cinit__(self, int L, double b):
+    def __cinit__(self, int L, double b, *arg, **kw):
         self._L = L
         self._b = b
         self._field.resize(L*L)
@@ -50,9 +51,15 @@ cdef class GameField:
         for j in range(arr.size):
             self._field[j] = arr[j]
 
-    def evolve(self, int num_steps=1):
+    def evolveT(self, int num_steps=1):
+        """Evovle triangular grid game."""
         with nogil:
-            evolve_field(self._field, self._b, num_steps)
+            evolveT(self._field, self._b, num_steps)
+
+    def evolveQ(self, int num_steps=1):
+        """Evovle classic grid game."""
+        with nogil:
+            evolveQ(self._field, self._b, num_steps)
 
 #### init the numpy C API
 import_array()

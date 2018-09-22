@@ -4,7 +4,7 @@
 #include<vector>
 
 void update(std::vector<int>& field, double b);
-void fake_evolve(std::vector<int>& field, double b, int num_steps);
-void evolve_field(std::vector<int>& field, double b, int num_steps);
+void evolveT(std::vector<int>& field, double b, int num_steps);
+void evolveQ(std::vector<int>& field, double b, int num_steps);
 
 #endif
